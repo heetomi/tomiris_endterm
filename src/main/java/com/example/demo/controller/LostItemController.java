@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.model.LostItem;
 import com.example.demo.service.LostItemDbService;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,27 +18,25 @@ public class LostItemController {
 
     @GetMapping
     public List<LostItem> getAll() {
-        return service.getAll();
+        return service.findAll();
     }
 
     @GetMapping("/{id}")
     public LostItem getById(@PathVariable Long id) {
-        return service.getById(id);
+        return service.findById(id);
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody LostItem item) {
-        service.create(item);
+    public LostItem create(@RequestBody LostItem item) {
+        return service.create(item);
     }
 
     @PutMapping("/{id}")
-    public void update(@PathVariable Long id, @RequestBody LostItem item) {
-        service.update(id, item);
+    public LostItem update(@PathVariable Long id, @RequestBody LostItem item) {
+        return service.update(id, item);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }

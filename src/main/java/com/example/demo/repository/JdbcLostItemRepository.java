@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class JdbcLostItemRepository implements LostItemRepository {
@@ -45,15 +46,25 @@ public class JdbcLostItemRepository implements LostItemRepository {
     }
 
     @Override
-    public void create(LostItem item) {
-        String sql = "INSERT INTO lost_items(name, date_found) VALUES (?, ?)";
-        jdbcTemplate.update(sql, item.getName(), item.getDateFound());
+    public LostItem create(LostItem item) {
+        String sql = "INSERT INTO lost_items(name, date_found) VALUES (?, ?) RETURNING id";
+
+        Long id = jdbcTemplate.queryForObject(
+                sql,
+                Long.class,
+                item.getName(),
+                item.getDateFound()
+        );
+
+        return new LostItem(id, item.getName(), item.getDateFound());
     }
 
+
     @Override
-    public void update(Long id, LostItem item) {
+    public LostItem update(Long id, LostItem item) {
         String sql = "UPDATE lost_items SET name=?, date_found=? WHERE id=?";
         jdbcTemplate.update(sql, item.getName(), item.getDateFound(), id);
+        return item;
     }
 
     @Override

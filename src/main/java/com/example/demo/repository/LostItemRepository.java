@@ -9,7 +9,8 @@ public interface LostItemRepository {
     List<LostItem> findAll();
     Optional<LostItem> findById(Long id);
 
-    void create(LostItem item);
-    void update(Long id, LostItem item);
+    LostItem create(LostItem item);
+    LostItem update(Long id, LostItem item);
+
     void delete(Long id);
 }
